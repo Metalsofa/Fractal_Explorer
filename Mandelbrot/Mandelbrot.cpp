@@ -220,8 +220,8 @@ void activeMouseMove(int x, int y) {
 		renderScene();
 	}
 	if (mouserightdown) {
-		myViewingState.start_x = myViewingState.winToFracX(x)*3.0f - 2.0f;
-		myViewingState.start_y = myViewingState.winToFracY(windowHeight-y)*2.0f - 1.0f;
+		myViewingState.start_x = myViewingState.winToFracX(x);
+		myViewingState.start_y = myViewingState.winToFracY(windowHeight-y);
 		renderScene();
 	}
 }
@@ -249,8 +249,8 @@ void mouseClick(int button, int state, int x, int y) {
 		break;
 	case GLUT_RIGHT_BUTTON:
 		mouserightdown = !state;
-		myViewingState.start_x = myViewingState.winToFracX(x)*3.0f - 2.0f;
-		myViewingState.start_y = myViewingState.winToFracY(windowHeight-y)*2.0f - 1.0f;
+		myViewingState.start_x = myViewingState.winToFracX(x);
+		myViewingState.start_y = myViewingState.winToFracY(windowHeight-y);
 		renderScene();
 		break;
 	case 3: //Upscroll

@@ -327,6 +327,7 @@ bool listen() {
 		std::cerr << "Okay so the CLI isn't really implemented yet :)" << std::endl;
 	}
 	if (command == "ping") {
+		//A change
 		std::cerr << "pong" << std::endl;
 	}
 	return true;

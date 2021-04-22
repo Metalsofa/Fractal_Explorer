@@ -1,0 +1,20 @@
+BRAINSTORMING
+1. The user can pan and zoom on the fractal currently being rendered
+2. The user can use the command line to set pertinent variables
+3. The variable currently being controlled via right-click can be changed
+4. User can create keyboard bindings for commands
+5. All uniforms are kept in a map and can be evaluated on the command line using $
+6. Users can write their own shaders and have them be re-sourced during runtime
+7. The current rendering state can be saved in the program, or saved to a file
+SAVE command:
+	-Save the current rendering state in the program
+	-Save the current rendering state to a file
+	-Save a screenshot to a file
+	-Save a memorized rendering state to a file
+Things to be able to do through command line:
+	-Set number of iterations
+	-Set C value
+	-Check C value
+	-Check cam coordinates
+	-Save state
+	-Set iteration count

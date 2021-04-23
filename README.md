@@ -20,4 +20,12 @@ Press `ctrl+shift+<any key>` to load a previously saved camera position/display 
 
 For example, if you find something cool, do `ctrl+A` to save it under the `A` key, then later press `ctrl+shift+A` to return to that saved spot.
 
-The fractals are defined in the Shaders folder. You can modify the GLSL shader code to make your own fractals
+The fractals are defined in the Shaders folder. 
+The first four of these are classic fractals, being the Mandelbrot, Mandelbrot-Julia, Burning Ship, and Burning Ship-Julia fractals in order.
+The fifth one (MiscShader1.frag) is meant for some user experimentation--since shaders are compiled upon program startup,
+you can modify the GLSL shader code to make your own fractals! It's fun to experiment with this.
+
+Things I still haven't added:
+-An easier way to make your own fractals without needing to know too much about GLSL
+-A way for users to make their own colorschemes (instead of just having to use the ones I made)
+-An native way for users to take screencaps or larger-than-screen captures

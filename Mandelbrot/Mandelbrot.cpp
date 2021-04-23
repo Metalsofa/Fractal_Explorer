@@ -396,6 +396,11 @@ void ProccessKeys(unsigned char key, int x, int y) {
 		myViewingState.center_y = 0.5f;
 		myViewingState.zoom = 1.0f;
 		break;
+	case 'p': //Print summary of display state
+		std::cerr << "Current viewing state: " << std::endl;
+		myViewingState.print(std::cerr);
+		std::cerr << std::endl;
+		break;
 	}
 	renderScene();
 }

@@ -29,3 +29,5 @@ Things I still haven't added:
 -An easier way to make your own fractals without needing to know too much about GLSL
 -A way for users to make their own colorschemes (instead of just having to use the ones I made)
 -An native way for users to take screencaps or larger-than-screen captures
+
+Please feel free to request features if there's something you want to see!

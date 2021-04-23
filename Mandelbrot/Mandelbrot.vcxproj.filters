@@ -58,6 +58,9 @@
     <None Include="..\Shaders\BurningJulia.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="..\Shaders\MiscShader1.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="brainstorm.txt">

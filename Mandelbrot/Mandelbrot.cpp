@@ -23,7 +23,7 @@ int mouseactivex;
 int mouseactivey;
 
 float zoomfactor = 1.2f;
-float base_width = 3.0f;
+float base_width = 4.0f;
 float base_height = 1.0f;
 
 
@@ -33,17 +33,20 @@ bool shiftdown = false;
 
 bool consoleListen = false;
 
+
+
 #define FRACTAL_MANDELBROT 0
 #define FRACTAL_JULIA 1
 #define FRACTAL_BURNING_SHIP 2
 #define FRACTAL_BURNING_JULIA 3
-#define FRACTAL_COUNT 4
+#define FRACTAL_MISC 4
+#define FRACTAL_COUNT 5
 
 //Save a view you found particularly cool
 class ViewingState {
 public:
 	//Camera
-	float center_x = -0.5f;
+	float center_x = 0.0f;
 	float center_y = 0.0f;
 	float zoom = 1.0f;
 	//Rendering
@@ -51,7 +54,7 @@ public:
 	float start_y = 0.0f;
 	int max_iterations = 16;
 	int mode = FRACTAL_MANDELBROT;
-	int colorscheme = 1;
+	std::map<std::string,GLuint>::iterator colorscheme;
 
 	//Temporary variables
 	float temp_center_x = 0.0f;
@@ -69,7 +72,7 @@ public:
 		dest << "start_y: " << start_y << std::endl;
 		dest << "max_iterations: " << max_iterations << std::endl;
 		dest << "mode: " << mode << std::endl;
-		dest << "colorscheme: " << colorscheme << std::endl;
+		dest << "colorscheme: " << colorscheme->first << std::endl;
 	}
 	//Returns updated center positions
 	float updatedCenterX() const { return center_x + temp_center_x; }
@@ -183,20 +186,27 @@ void activateFractalMode(const ViewingState& VS) {
 		ShaderPrograms::BurningJuliaShader.setFloat("X", VS.start_x);
 		ShaderPrograms::BurningJuliaShader.setFloat("Y", VS.start_y);
 		return;
+	case FRACTAL_MISC:
+		ShaderPrograms::MiscShader1Shader.Use();
+		ShaderPrograms::MiscShader1Shader.setInt("maxIterations", VS.max_iterations);
+		ShaderPrograms::MiscShader1Shader.setInt("Gradient", 0);
+		ShaderPrograms::MiscShader1Shader.setFloat("X", VS.start_x);
+		ShaderPrograms::MiscShader1Shader.setFloat("Y", VS.start_y);
+		return;
 	default:
 		assert(0 && "Error - invalid fractal mode passed to activateFractalMode");
 		return;
 	}
 }
 
-//
+//TODO: Implement a way to take screenshots natively
 
 //Renderscene callback
 void renderScene() {
 	ClearScreen();
 	//Bind texture
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_1D, myViewingState.colorscheme);
+	glBindTexture(GL_TEXTURE_1D, myViewingState.colorscheme->second);
 	//Use program
 	glClearError();
 	activateFractalMode(myViewingState);
@@ -364,8 +374,12 @@ void ProccessKeys(unsigned char key, int x, int y) {
 		break;
 	case 'c':
 		++myViewingState.colorscheme;
+		if (myViewingState.colorscheme == Gradients::gradTextures.end())
+			myViewingState.colorscheme = Gradients::gradTextures.begin();
 		break;
 	case 'C':
+		if (myViewingState.colorscheme == Gradients::gradTextures.begin())
+			myViewingState.colorscheme = Gradients::gradTextures.end();
 		--myViewingState.colorscheme;
 		break;
 	case 'm':
@@ -436,6 +450,7 @@ int main(int argc, char** argv)
 	ShaderProgram::initializeAllShaderPrograms();
 	//Initialize gradients
 	Gradients::initGradients();
+	myViewingState.colorscheme = Gradients::gradTexItr;
 
 	initGL();                       // Our own OpenGL initialization
 	glutMainLoop();                 // Enter the event-processing loop

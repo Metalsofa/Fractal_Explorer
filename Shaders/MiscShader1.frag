@@ -1,4 +1,4 @@
-// MANDELBROT FRAGMENT SHADER
+// JULIA FRAGMENT SHADER
 //uses a 1D texture to map that data point to an output color.
 #version 410 compatibility
 //Input: Interpolated 3D texture coordinates for this fragment 
@@ -11,20 +11,25 @@ out vec4 FragColor;
 uniform int maxIterations;
 //Uniform: sampler used as gradient
 uniform sampler1D Gradient;
-
-vec2 iterate(vec2 z, vec2 c) {
-	return vec2(z.x*z.x -z.y*z.y + c.x, 2*z.x*z.y+c.y);
-}
+//Uniform: C
+uniform float X;
+uniform float Y;
 
 //Main function
 void main() {
 	float Value;
 
-	vec2 z = vec2(0,0);
+	float x_;
+	float y_;
+	float x = ftexCoord.x;
+	float y = ftexCoord.y;
 	int i;
 	for (i = 0; i < maxIterations; ++i) {
-		z = iterate(z,ftexCoord);
-		if (length(z) > 2.0) {
+		x_ = x*x*x - y*y + X;
+		y_ = 2.0*x*y*y + Y;
+		x = x_;
+		y = y_;
+		if (x*x + y*y > 4.0) {
 			break;
 		}
 	}
@@ -36,5 +41,5 @@ void main() {
 	/* Alpha is divided by multiplicity to keep the total opacity
 	 * of this sheet invariant under multiplicity */
 	 FragColor = texture1D(Gradient, Value);
+//	 FragColor = vec4(Value,0,0,1);
 };
-

@@ -356,6 +356,29 @@ public:
 std::vector<ShaderProgram*> ShaderProgram::all_ShaderPrograms_vec;
 std::string ShaderProgram::my_shaders_directory;
 
+//A fractal is a pair of shaders depending on the same iterated map
+class Fractal {
+private:
+	// STATIC MEMBER VARIABLES
+	static std::string common_header;
+	static std::string common_footer;
+	// REPRESENTATION
+	ShaderProgram FixedFractalShader;
+	ShaderProgram VariantFractalShader;
+
+public:
+	void useFixed() const { FixedFractalShader.Use(); }
+	void useVariant() const { VariantFractalShader.Use(); }
+
+	//Construct from an input file containing just the function
+	//TODO: Fully implement Fractal class
+
+};
+
+std::string Fractal::common_header;
+std::string Fractal::common_footer;
+
+
 //Namespace for defining all our shaders
 namespace ShaderPrograms {
 	//Mandelbrot fractal shader
@@ -363,6 +386,7 @@ namespace ShaderPrograms {
 	ShaderProgram JuliaShader({ "Rectangle.vert","Julia.frag" });
 	ShaderProgram BurningShipShader({ "Rectangle.vert","BurningShip.frag" });
 	ShaderProgram BurningJuliaShader({ "Rectangle.vert","BurningJulia.frag" });
+	ShaderProgram MiscShader1Shader({ "Rectangle.vert","MiscShader1.frag" });
 }
 
 #endif

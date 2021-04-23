@@ -80,6 +80,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)\Mandelbrot\fgrutils;$(SolutionDir)\Mandelbrot\freeglut_win32_API;$(SolutionDir)\Mandelbrot\glew-2.1.0\include\GL;$(SolutionDir)\Mandelbrot\freeglut\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Mandelbrot\freeglut\lib;$(SolutionDir)\Mandelbrot\glew-2.1.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -132,6 +134,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -167,6 +170,7 @@
     <None Include="..\Shaders\BurningShip.frag" />
     <None Include="..\Shaders\Julia.frag" />
     <None Include="..\Shaders\Mandelbrot.frag" />
+    <None Include="..\Shaders\MiscShader1.frag" />
     <None Include="..\Shaders\Rectangle.vert" />
   </ItemGroup>
   <ItemGroup>

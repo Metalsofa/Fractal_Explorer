@@ -178,6 +178,8 @@ namespace Gradients {
 
 	std::map<std::string, GLuint> gradTextures;
 
+	std::map<std::string, GLuint>::iterator gradTexItr;
+
 #define initGrad(name) gradTextures[#name] = makeGradientTexture(name, compiledGradientResolution);
 
 	void initGradients() {
@@ -188,6 +190,7 @@ namespace Gradients {
 		initGrad(blood);
 		initGrad(noir);
 		glCheckError("Finished generating texture gradients");
+		gradTexItr = gradTextures.begin();
 	}
 }
 

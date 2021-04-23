@@ -21,7 +21,7 @@ void main() {
 	float x_;
 	float y_;
 	float X = ftexCoord.x;
-	float Y = ftexCoord.y;
+	float Y = -ftexCoord.y;
 	int i;
 	for (i = 0; i < maxIterations; ++i) {
 		x = abs(x); 

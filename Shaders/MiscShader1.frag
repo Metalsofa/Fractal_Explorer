@@ -25,8 +25,8 @@ void main() {
 	float y = ftexCoord.y;
 	int i;
 	for (i = 0; i < maxIterations; ++i) {
-		x_ = x*x*x - y*y + X;
-		y_ = 2.0*x*y*y + Y;
+		x_ = x*x*y - y*y*x + X;
+		y_ = 2.0*x*y + Y;
 		x = x_;
 		y = y_;
 		if (x*x + y*y > 4.0) {

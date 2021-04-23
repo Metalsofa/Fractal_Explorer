@@ -28,7 +28,7 @@ void main() {
 		x = abs(x);
 		y = abs(y);
 		x_ = x*x - y*y + X;
-		y_ = 2.0*x*y + Y;
+		y_ = 2.0*x*y - Y;
 		x = x_;
 		y = y_;
 		if (x*x + y*y > 4.0) {

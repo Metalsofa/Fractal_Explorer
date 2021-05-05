@@ -35,12 +35,7 @@ void main() {
 		}
 	}
 	Value = float(maxIterations-i) / float(maxIterations+1);
+//	Value = 1.0 / (1 + length(vec2(x,y)));
 
-	/* Set the frag color by sampling the Gradient 
-	 * at a position determined by sampling the DataTexture */
-//	FragColor = texture1D(Gradient, Value);
-	/* Alpha is divided by multiplicity to keep the total opacity
-	 * of this sheet invariant under multiplicity */
 	 FragColor = texture1D(Gradient, Value);
-//	 FragColor = vec4(Value,0,0,1);
 };

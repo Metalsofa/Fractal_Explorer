@@ -22,6 +22,12 @@
     <Filter Include="Notes">
       <UniqueIdentifier>{88f1414f-4886-4cf5-ad12-24142f4e33b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\GlobalSource">
+      <UniqueIdentifier>{00f7e51c-9de4-41be-8352-2d1d71bca5dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Fractals">
+      <UniqueIdentifier>{dc6cbb80-73e4-4891-a0f0-e013f097fcd0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Mandelbrot.cpp">
@@ -40,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="fgrutils\fgrcolor.h">
       <Filter>Header Files\fgrutils</Filter>
+    </ClInclude>
+    <ClInclude Include="Fractal.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +69,33 @@
     </None>
     <None Include="..\Shaders\MiscShader1.frag">
       <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\GlobalSource\Finalstate_tail.glsl">
+      <Filter>Shaders\GlobalSource</Filter>
+    </None>
+    <None Include="..\GlobalSource\Iteration_tail.glsl">
+      <Filter>Shaders\GlobalSource</Filter>
+    </None>
+    <None Include="..\GlobalSource\Julia_head.glsl">
+      <Filter>Shaders\GlobalSource</Filter>
+    </None>
+    <None Include="..\GlobalSource\Mandelbrot_head.glsl">
+      <Filter>Shaders\GlobalSource</Filter>
+    </None>
+    <None Include="..\GlobalSource\Common_header.glsl">
+      <Filter>Shaders\GlobalSource</Filter>
+    </None>
+    <None Include="..\Fractals\BurningShip.glsl">
+      <Filter>Shaders\Fractals</Filter>
+    </None>
+    <None Include="..\Fractals\Mandelbrot.glsl">
+      <Filter>Shaders\Fractals</Filter>
+    </None>
+    <None Include="..\Fractals\Misc.glsl">
+      <Filter>Shaders\Fractals</Filter>
+    </None>
+    <None Include="..\Fractals\Bubbly.glsl">
+      <Filter>Shaders\Fractals</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

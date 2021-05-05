@@ -36,6 +36,7 @@ void main() {
 		}
 	}
 	Value = float(maxIterations-i) / float(maxIterations+1);
+//	Value = 1.0 / (1 + length(vec2(x,y)));
 
 	/* Set the frag color by sampling the Gradient 
 	 * at a position determined by sampling the DataTexture */

@@ -17,9 +17,9 @@ uniform float Y;
 
 vec2 cdiv(vec2 z1, vec2 z2) {
 	return vec2 (
-		dot(z1,z2),
-		dot(z1,vec2(-z2.y,z2.x))
-	) / dot(z2,z2);
+		dot(z1,z2) / dot(z2,z2),
+		-dot(z1,vec2(z2.y,z2.x)) / dot(z2,z2)
+	);
 }
 
 vec2 cmult(vec2 z1, vec2 z2) {
@@ -36,14 +36,12 @@ void main() {
 
 	float x = ftexCoord.x;
 	float y = ftexCoord.y;
-//	vec2 z = vec2(x,y);
-//	vec2 c = vec2(X,Y);
-	vec2 z = vec2(X,0);
-	vec2 c = vec2(x,y);
+	vec2 z = vec2(x,y);
+	vec2 c = vec2(X,Y);
 	int i;
 	for (i = 0; i < maxIterations; ++i) {
 		z = cdiv(cmult(z,z)+z, cmult(cmult(z,z),z)+c);
-		if (length(z) > abs(2*Y)) {
+		if (length(z) > 2.0) {
 			break;
 		}
 	}

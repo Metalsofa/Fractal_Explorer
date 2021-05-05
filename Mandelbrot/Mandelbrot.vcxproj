@@ -74,6 +74,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)\Mandelbrot\fgrutils;$(SolutionDir)\Mandelbrot\freeglut_win32_API;$(SolutionDir)\Mandelbrot\glew-2.1.0\include\GL;$(SolutionDir)\Mandelbrot\freeglut\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\Mandelbrot\freeglut\lib;$(SolutionDir)\Mandelbrot\glew-2.1.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
+    <ExcludePath>$(SolutionDir)Fractals;$(ExcludePath)</ExcludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -82,6 +83,7 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)\Mandelbrot\fgrutils;$(SolutionDir)\Mandelbrot\freeglut_win32_API;$(SolutionDir)\Mandelbrot\glew-2.1.0\include\GL;$(SolutionDir)\Mandelbrot\freeglut\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\Mandelbrot\freeglut\lib;$(SolutionDir)\Mandelbrot\glew-2.1.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
+    <ExcludePath>$(SolutionDir)Fractals;$(ExcludePath)</ExcludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -161,11 +163,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fgrutils\fgrcolor.h" />
+    <ClInclude Include="Fractal.h" />
     <ClInclude Include="freeglut_win32_API\freeglut32.h" />
     <ClInclude Include="freeglut_win32_API\gradients.h" />
     <ClInclude Include="Shaders.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Fractals\Bubbly.glsl" />
+    <None Include="..\Fractals\BurningShip.glsl" />
+    <None Include="..\Fractals\Mandelbrot.glsl" />
+    <None Include="..\Fractals\Misc.glsl" />
+    <None Include="..\GlobalSource\Common_header.glsl" />
+    <None Include="..\GlobalSource\Finalstate_tail.glsl" />
+    <None Include="..\GlobalSource\Iteration_tail.glsl" />
+    <None Include="..\GlobalSource\Julia_head.glsl" />
+    <None Include="..\GlobalSource\Mandelbrot_head.glsl" />
     <None Include="..\Shaders\BurningJulia.frag" />
     <None Include="..\Shaders\BurningShip.frag" />
     <None Include="..\Shaders\Julia.frag" />

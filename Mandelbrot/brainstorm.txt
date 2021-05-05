@@ -18,3 +18,9 @@ Things to be able to do through command line:
 	-Check cam coordinates
 	-Save state
 	-Set iteration count
+
+A fractal object has 4 Shaders:
+	Mandelbrot iteration-coloring
+	Julia iteration-coloring
+	Mandelbrot finalstate-coloring
+	Julia finalstate-coloring

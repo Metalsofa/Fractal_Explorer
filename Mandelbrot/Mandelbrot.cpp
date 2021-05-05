@@ -7,6 +7,7 @@
 #include <sstream>
 #include "freeglut_win32_API/freeglut32.h"
 #include "Shaders.h"
+#include "Fractal.h"
 #include "gradients.h"
 
 //Globals
@@ -33,15 +34,6 @@ bool shiftdown = false;
 
 bool consoleListen = false;
 
-
-
-#define FRACTAL_MANDELBROT 0
-#define FRACTAL_JULIA 1
-#define FRACTAL_BURNING_SHIP 2
-#define FRACTAL_BURNING_JULIA 3
-#define FRACTAL_MISC 4
-#define FRACTAL_COUNT 5
-
 //Save a view you found particularly cool
 class ViewingState {
 public:
@@ -53,7 +45,13 @@ public:
 	float start_x = 0.0f;
 	float start_y = 0.0f;
 	int max_iterations = 16;
-	int mode = FRACTAL_MANDELBROT;
+	//Which fractal is currently in use
+	int currentFractal = 0;
+	//Which type of fractal plotting is in use
+	int plot_type = 0;
+	//Which coloring method is in use
+	int color_style = 0;
+	//Colorscheme currently in use
 	std::map<std::string,GLuint>::iterator colorscheme;
 
 	//Temporary variables
@@ -63,6 +61,7 @@ public:
 	// MEDTHODS
 	//Print to an output stream
 	void print(std::ostream& dest) {
+		dest << "REPORT: " << std::endl;
 		dest << "center_x: " << center_x << std::endl;
 		dest << "center_y: " << center_y << std::endl;
 		dest << "zoom: " << zoom << std::endl;
@@ -71,7 +70,9 @@ public:
 		dest << "start_x: " << start_x << std::endl;
 		dest << "start_y: " << start_y << std::endl;
 		dest << "max_iterations: " << max_iterations << std::endl;
-		dest << "mode: " << mode << std::endl;
+		dest << "source: " << FractalObject::all_FractalObjects_vec[currentFractal]->getName() << std::endl;
+		dest << "plot_type: " << plot_type << std::endl;
+		dest << "color_style: " << color_style << std::endl;
 		dest << "colorscheme: " << colorscheme->first << std::endl;
 	}
 	//Returns updated center positions
@@ -161,42 +162,12 @@ void ClearScreen() {
 
 //Activate the fractal drawing mode for the current fractal mode selection
 void activateFractalMode(const ViewingState& VS) {
-	switch (VS.mode) {
-	case FRACTAL_MANDELBROT:
-		ShaderPrograms::MandelbrotShader.Use();
-		ShaderPrograms::MandelbrotShader.setInt("maxIterations", VS.max_iterations);
-		ShaderPrograms::MandelbrotShader.setInt("Gradient", 0);
-		return;
-	case FRACTAL_JULIA:
-		ShaderPrograms::JuliaShader.Use();
-		ShaderPrograms::JuliaShader.setInt("maxIterations", VS.max_iterations);
-		ShaderPrograms::JuliaShader.setInt("Gradient", 0);
-		ShaderPrograms::JuliaShader.setFloat("X", VS.start_x);
-		ShaderPrograms::JuliaShader.setFloat("Y", VS.start_y);
-		return;
-	case FRACTAL_BURNING_SHIP:
-		ShaderPrograms::BurningShipShader.Use();
-		ShaderPrograms::BurningShipShader.setInt("maxIterations", VS.max_iterations);
-		ShaderPrograms::BurningShipShader.setInt("Gradient", 0);
-		return;
-	case FRACTAL_BURNING_JULIA:
-		ShaderPrograms::BurningJuliaShader.Use();
-		ShaderPrograms::BurningJuliaShader.setInt("maxIterations", VS.max_iterations);
-		ShaderPrograms::BurningJuliaShader.setInt("Gradient", 0);
-		ShaderPrograms::BurningJuliaShader.setFloat("X", VS.start_x);
-		ShaderPrograms::BurningJuliaShader.setFloat("Y", VS.start_y);
-		return;
-	case FRACTAL_MISC:
-		ShaderPrograms::MiscShader1Shader.Use();
-		ShaderPrograms::MiscShader1Shader.setInt("maxIterations", VS.max_iterations);
-		ShaderPrograms::MiscShader1Shader.setInt("Gradient", 0);
-		ShaderPrograms::MiscShader1Shader.setFloat("X", VS.start_x);
-		ShaderPrograms::MiscShader1Shader.setFloat("Y", VS.start_y);
-		return;
-	default:
-		assert(0 && "Error - invalid fractal mode passed to activateFractalMode");
-		return;
-	}
+	ShaderProgram* SP = FractalObject::all_FractalObjects_vec[VS.currentFractal]->getProgram(VS.plot_type, VS.color_style);
+	SP->Use();
+	SP->setInt("maxIterations", VS.max_iterations);
+	SP->setInt("Gradient", 0);
+	if (VS.plot_type == FRACTYPE_JULIA) SP->setVec2("C", VS.start_x, VS.start_y);
+	return;
 }
 
 //TODO: Implement a way to take screenshots natively
@@ -383,17 +354,23 @@ void ProccessKeys(unsigned char key, int x, int y) {
 		--myViewingState.colorscheme;
 		break;
 	case 'm':
-		++myViewingState.mode;
-		myViewingState.mode %= FRACTAL_COUNT;
+		myViewingState.plot_type = !myViewingState.plot_type;
 		break;
 	case 'M':
-		--myViewingState.mode;
-		if (myViewingState.mode < 0) myViewingState.mode += FRACTAL_COUNT;
-		myViewingState.mode %= FRACTAL_COUNT;
+		myViewingState.color_style = !myViewingState.color_style;
+		break;
+	case 'f':
+		++myViewingState.currentFractal;
+		myViewingState.currentFractal %= FractalObject::all_FractalObjects_vec.size();
+		break;
+	case 'F':
+		--myViewingState.currentFractal;
+		if (myViewingState.currentFractal < 0)
+			myViewingState.currentFractal = FractalObject::all_FractalObjects_vec.size() - 1;
 		break;
 	case 'h': //Return to home view
-		myViewingState.center_x = 0.5f;
-		myViewingState.center_y = 0.5f;
+		myViewingState.center_x = 0.0f;
+		myViewingState.center_y = 0.0f;
 		myViewingState.zoom = 1.0f;
 		break;
 	case 'p': //Print summary of display state
@@ -405,7 +382,13 @@ void ProccessKeys(unsigned char key, int x, int y) {
 	renderScene();
 }
 
-//Initialize textures to be used in this program
+//Initialize fractals to be used in this program
+void initFractals() {
+	new FractalObject("Mandelbrot.glsl");
+	new FractalObject("BurningShip.glsl");
+	new FractalObject("Misc.glsl");
+	new FractalObject("Bubbly.glsl");
+}
 
 //Main function
 int main(int argc, char** argv)
@@ -450,12 +433,14 @@ int main(int argc, char** argv)
 	glutKeyboardFunc(ProccessKeys);
 
 
+	//Initialize fractals
+	initFractals();
 
 	//Initialize shaders
 	ShaderProgram::initializeAllShaderPrograms();
 	//Initialize gradients
 	Gradients::initGradients();
-	myViewingState.colorscheme = Gradients::gradTexItr;
+	myViewingState.colorscheme = Gradients::gradTextures.find("rainbow");
 
 	initGL();                       // Our own OpenGL initialization
 	glutMainLoop();                 // Enter the event-processing loop

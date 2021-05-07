@@ -97,10 +97,16 @@
     <None Include="..\Fractals\Bubbly.glsl">
       <Filter>Shaders\Fractals</Filter>
     </None>
+    <None Include="..\Fractals\Simonbrot.glsl">
+      <Filter>Shaders\Fractals</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="brainstorm.txt">
       <Filter>Notes</Filter>
+    </Text>
+    <Text Include="..\Fractals\config.txt">
+      <Filter>Shaders\Fractals</Filter>
     </Text>
   </ItemGroup>
 </Project>

@@ -173,6 +173,7 @@
     <None Include="..\Fractals\BurningShip.glsl" />
     <None Include="..\Fractals\Mandelbrot.glsl" />
     <None Include="..\Fractals\Misc.glsl" />
+    <None Include="..\Fractals\Simonbrot.glsl" />
     <None Include="..\GlobalSource\Common_header.glsl" />
     <None Include="..\GlobalSource\Finalstate_tail.glsl" />
     <None Include="..\GlobalSource\Iteration_tail.glsl" />
@@ -186,6 +187,7 @@
     <None Include="..\Shaders\Rectangle.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="..\Fractals\config.txt" />
     <Text Include="brainstorm.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

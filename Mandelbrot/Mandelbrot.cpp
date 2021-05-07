@@ -42,8 +42,8 @@ public:
 	float center_y = 0.0f;
 	float zoom = 1.0f;
 	//Rendering
-	float start_x = 0.0f;
-	float start_y = 0.0f;
+	float param_x = 0.0f;
+	float param_y = 0.0f;
 	int max_iterations = 16;
 	//Which fractal is currently in use
 	int currentFractal = 0;
@@ -67,8 +67,8 @@ public:
 		dest << "zoom: " << zoom << std::endl;
 		dest << "base_width: " << base_width << std::endl;
 		dest << "base_height: " << base_height << std::endl;
-		dest << "start_x: " << start_x << std::endl;
-		dest << "start_y: " << start_y << std::endl;
+		dest << "param_x: " << param_x << std::endl;
+		dest << "param_y: " << param_y << std::endl;
 		dest << "max_iterations: " << max_iterations << std::endl;
 		dest << "source: " << FractalObject::all_FractalObjects_vec[currentFractal]->getName() << std::endl;
 		dest << "plot_type: " << plot_type << std::endl;
@@ -166,7 +166,7 @@ void activateFractalMode(const ViewingState& VS) {
 	SP->Use();
 	SP->setInt("maxIterations", VS.max_iterations);
 	SP->setInt("Gradient", 0);
-	if (VS.plot_type == FRACTYPE_JULIA) SP->setVec2("C", VS.start_x, VS.start_y);
+	if (VS.plot_type == FRACTYPE_JULIA) SP->setVec2("C", VS.param_x, VS.param_y);
 	return;
 }
 
@@ -201,8 +201,8 @@ void activeMouseMove(int x, int y) {
 		renderScene();
 	}
 	if (mouserightdown) {
-		myViewingState.start_x = myViewingState.winToFracX(x);
-		myViewingState.start_y = myViewingState.winToFracY(windowHeight-y);
+		myViewingState.param_x = myViewingState.winToFracX(x);
+		myViewingState.param_y = myViewingState.winToFracY(windowHeight-y);
 		renderScene();
 	}
 }
@@ -230,8 +230,8 @@ void mouseClick(int button, int state, int x, int y) {
 		break;
 	case GLUT_RIGHT_BUTTON:
 		mouserightdown = !state;
-		myViewingState.start_x = myViewingState.winToFracX(x);
-		myViewingState.start_y = myViewingState.winToFracY(windowHeight-y);
+		myViewingState.param_x = myViewingState.winToFracX(x);
+		myViewingState.param_y = myViewingState.winToFracY(windowHeight-y);
 		renderScene();
 		break;
 	case 3: //Upscroll
@@ -353,10 +353,10 @@ void ProccessKeys(unsigned char key, int x, int y) {
 			myViewingState.colorscheme = Gradients::gradTextures.end();
 		--myViewingState.colorscheme;
 		break;
-	case 'm':
+	case 'd':
 		myViewingState.plot_type = !myViewingState.plot_type;
 		break;
-	case 'M':
+	case 's':
 		myViewingState.color_style = !myViewingState.color_style;
 		break;
 	case 'f':
@@ -384,10 +384,23 @@ void ProccessKeys(unsigned char key, int x, int y) {
 
 //Initialize fractals to be used in this program
 void initFractals() {
-	new FractalObject("Mandelbrot.glsl");
-	new FractalObject("BurningShip.glsl");
-	new FractalObject("Misc.glsl");
-	new FractalObject("Bubbly.glsl");
+	//Set global fractal data directories
+	FractalObject::my_global_source_directory = upLevelDirectory(glut32::getExecutableDirectory_s()) + "\\GlobalSource\\";
+	FractalObject::my_fractals_directory = upLevelDirectory(glut32::getExecutableDirectory_s()) + "\\Fractals\\";
+	//Open the config file
+	std::ifstream input(FractalObject::my_fractals_directory + "\\config.txt");
+	if (!input.good()) {
+		std::cerr << "Fatal error - could not open config.txt" << std::endl;
+		exit(1);
+	}
+	std::string token;
+	while (std::getline(input, token)) {
+		//Ignore comment lines; they start with //
+		if (token.substr(0, 2) == "//") continue;
+		new FractalObject(token);
+	}
+	//Close the config file
+	input.close();
 }
 
 //Main function

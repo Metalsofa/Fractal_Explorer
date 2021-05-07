@@ -1,6 +1,7 @@
+
 //Required: Function used to iterate z, using c as a parameter
 vec2 f_iterFunc(vec2 z, vec2 c) {
-	return cpowf(z,3) + c;
+	return cmult(cmult(z,z),cmult(abs(z),abs(z))) + c;
 }
 
 //Required: Function for testing whether z has escaped

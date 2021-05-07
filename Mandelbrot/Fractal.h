@@ -78,11 +78,6 @@ public:
 
 	// CONSTRUCTOR
 	FractalObject(const std::string& sourcePath) {
-		//If it hasn't been set, set the source path
-		if (my_global_source_directory.size() == 0) {
-			my_global_source_directory = upLevelDirectory(glut32::getExecutableDirectory_s()) + "\\GlobalSource\\";
-			my_fractals_directory = upLevelDirectory(glut32::getExecutableDirectory_s()) + "\\Fractals\\";
-		}
 		//Set ID and put address in the global vector
 		myFractalObjectIndex = all_FractalObjects_vec.size();
 		all_FractalObjects_vec.push_back(this);

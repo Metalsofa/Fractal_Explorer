@@ -17,6 +17,7 @@
 
 //Reads a text file into a single std::string
 std::string fileToString(const std::string& filePath) {
+	if (filePath.size() == 0) return "";
 	std::ifstream fin(filePath);
 	//Make sure the open was successful
 	if (!fin.good()) {

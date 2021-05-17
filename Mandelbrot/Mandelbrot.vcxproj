@@ -179,11 +179,15 @@
     <None Include="..\GlobalSource\Iteration_tail.glsl" />
     <None Include="..\GlobalSource\Julia_head.glsl" />
     <None Include="..\GlobalSource\Mandelbrot_head.glsl" />
+    <None Include="..\GlobalSource\OrbitTrace_head.glsl" />
+    <None Include="..\GlobalSource\OrbitTrace_tail.glsl" />
     <None Include="..\Shaders\BurningJulia.frag" />
     <None Include="..\Shaders\BurningShip.frag" />
     <None Include="..\Shaders\Julia.frag" />
     <None Include="..\Shaders\Mandelbrot.frag" />
     <None Include="..\Shaders\MiscShader1.frag" />
+    <None Include="..\Shaders\OrbitTrace.frag" />
+    <None Include="..\Shaders\OrbitTrace.vert" />
     <None Include="..\Shaders\Rectangle.vert" />
   </ItemGroup>
   <ItemGroup>

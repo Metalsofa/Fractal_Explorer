@@ -71,8 +71,8 @@ public:
 		dest << "param_y: " << param_y << std::endl;
 		dest << "max_iterations: " << max_iterations << std::endl;
 		dest << "source: " << FractalObject::all_FractalObjects_vec[currentFractal]->getName() << std::endl;
-		dest << "plot_type: " << plot_type << std::endl;
-		dest << "color_style: " << color_style << std::endl;
+		dest << "plot_type: " << ((plot_type) ? ("Julia") : ("C-Map")) << std::endl;
+		dest << "color_style: " << ((color_style) ? ("Final z") : ("Iteration")) << std::endl;
 		dest << "colorscheme: " << colorscheme->first << std::endl;
 	}
 	//Returns updated center positions
@@ -86,6 +86,9 @@ public:
 	//Convert window coordinates to fractal ones
 	float winToFracX(int x) const { return (float(x)/windowWidth * (base_width / zoom)+leftBoundary()); }
 	float winToFracY(int y) const { return (float(y)/windowHeight * (base_height / zoom)+bottomBoundary()); }
+	//Convert fractal coordinates to window ones
+	int fracToWinX(float x) const { return (x - leftBoundary()) * (zoom / base_width) * windowWidth; }
+	int fracToWinY(float y) const { return (y - bottomBoundary()) * (zoom / base_height) * windowHeight; }
 	//Add temporary modifiers to actual values
 	void gulpState() {
 		center_x += temp_center_x;
@@ -166,7 +169,19 @@ void activateFractalMode(const ViewingState& VS) {
 	SP->Use();
 	SP->setInt("maxIterations", VS.max_iterations);
 	SP->setInt("Gradient", 0);
+	SP->setVec2("eyeCenter", VS.param_x, VS.param_y);
 	if (VS.plot_type == FRACTYPE_JULIA) SP->setVec2("C", VS.param_x, VS.param_y);
+	return;
+}
+
+//Activate fractal orbit tracing program
+void activateOrbitTrace(const ViewingState& VS) {
+	ShaderProgram* SP = FractalObject::all_FractalObjects_vec[VS.currentFractal]->getOrbitTraceProgram();
+	SP->Use();
+	SP->setVec2("C", VS.param_x, VS.param_y);
+	SP->setInt("maxIterations", VS.max_iterations);
+	SP->setVec2("bottomLeft", VS.leftBoundary(), VS.bottomBoundary());
+	SP->setVec2("topRight", VS.rightBoundary(), VS.topBoundary());
 	return;
 }
 
@@ -174,7 +189,6 @@ void activateFractalMode(const ViewingState& VS) {
 
 //Renderscene callback
 void renderScene() {
-	ClearScreen();
 	//Bind texture
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_1D, myViewingState.colorscheme->second);
@@ -185,7 +199,20 @@ void renderScene() {
 	//Unuse program
 	glUseProgram(0);
 	glBindTexture(GL_TEXTURE_1D, 0);
-	glCheckError("Use of shader program");
+
+	//Plot the orbit trace
+	float tx = 0;//myViewingState.winToFracX(mousedownx);
+	float ty = 0;//myViewingState.winToFracY(mousedowny);
+	int X = myViewingState.fracToWinX(0.0f);
+	int Y = myViewingState.fracToWinY(0.0f);
+	float vx = (float(X) / windowWidth) * 2 - 1;
+	float vy = (float(Y) / windowHeight) * 2 - 1;
+
+	activateOrbitTrace(myViewingState);
+	glBegin(GL_POINTS);
+		glTexCoord2f(tx, ty); glVertex2f(vx, vy);
+	glEnd();
+	glUseProgram(0);
 
 	//Implement what we've drawn
 	glutSwapBuffers();
@@ -237,7 +264,10 @@ void mouseClick(int button, int state, int x, int y) {
 	case 3: //Upscroll
 		if (state == GLUT_DOWN) {
 			if (mod & GLUT_ACTIVE_SHIFT) {
-				++myViewingState.max_iterations;
+				if (mod & GLUT_ACTIVE_CTRL)
+					myViewingState.max_iterations *= 2;
+				else
+					++myViewingState.max_iterations;
 			}
 			else {
 				myViewingState.zoom *= zoomfactor;
@@ -252,9 +282,15 @@ void mouseClick(int button, int state, int x, int y) {
 	case 4: //Downscroll
 		if (state == GLUT_DOWN) {
 			if (mod & GLUT_ACTIVE_SHIFT) {
-				--myViewingState.max_iterations;
-				if (myViewingState.max_iterations <= 0) {
-					myViewingState.max_iterations = 0;
+				if (mod & GLUT_ACTIVE_CTRL) {
+					if (myViewingState.max_iterations > 1)
+						myViewingState.max_iterations /= 2;
+				}
+				else {
+					--myViewingState.max_iterations;
+					if (myViewingState.max_iterations <= 0) {
+						myViewingState.max_iterations = 0;
+					}
 				}
 			}
 			else {
@@ -271,16 +307,22 @@ void mouseClick(int button, int state, int x, int y) {
 
 //Event handler for "special" keyboard input
 void ProcessSpecialKeys(int key, int x, int y) {
+	int mod = glutGetModifiers();
 	switch (key) {
 	case GLUT_KEY_LEFT:
-		//maxIterations /= 2;
-		--myViewingState.max_iterations;
-		if (myViewingState.max_iterations <= 0)
-			myViewingState.max_iterations = 1;
+		if (mod & GLUT_ACTIVE_CTRL)
+			myViewingState.max_iterations /= 2;
+		else {
+			--myViewingState.max_iterations;
+			if (myViewingState.max_iterations <= 0)
+				myViewingState.max_iterations = 1;
+		}
 		break;
 	case GLUT_KEY_RIGHT:
-		//maxIterations *= 2;
-		++myViewingState.max_iterations;
+		if (mod & GLUT_ACTIVE_CTRL)
+			myViewingState.max_iterations *= 2;
+		else
+			++myViewingState.max_iterations;
 		break;
 	}
 	renderScene();

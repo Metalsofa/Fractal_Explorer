@@ -9,13 +9,3 @@ bool f_escapeTestFunc(vec2 z) {
 	return (length(z) > 2.0);
 }
 
-//Required: Function for picking a color based on the final z state and iteration count
-vec4 f_IterColorFunc(float i) {
-	return texture1D(Gradient, i);
-}
-
-//Required: Function for picking a color based on the final z state and iteration count
-vec4 f_FinalstateColorFunc(vec2 z) {
-	return texture1D(Gradient, 1.0 / (length(z) + 1));
-}
-

@@ -5,6 +5,4 @@ void main() {
 	int i;
 	for (i = 0; i < maxIterations; ++i) {
 		z = f_iterFunc(z,C);
-		if (f_escapeTestFunc(z)) break;
-	}
 

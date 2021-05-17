@@ -54,6 +54,11 @@ public:
 	static const std::string IterationTailPath;
 	//Tail for Finalstate-colored programs
 	static const std::string FinalstateTailPath;
+
+	//Head for Orbit-Tracing program
+	static const std::string OrbitTraceHeadPath;
+	//Tail for Orbit-Tracing program
+	static const std::string OrbitTraceTailPath;
 private:
 	// SHADER REPRESENTATION
 	//Mandelbrot, Iteration-Colored
@@ -65,6 +70,9 @@ private:
 	//Julia, Finalstate-Colored
 	ShaderProgram JuliaFinalstateProgram;
 
+	//Orbit-Tracing program
+	ShaderProgram OrbitTraceProgram;
+
 	//Path to user-supplied sourcecode
 	std::string user_source_path;
 
@@ -73,6 +81,8 @@ private:
 	std::string temp_JuliaIterationPath;
 	std::string temp_MandelbrotFinalstatePath;
 	std::string temp_JuliaFinalstatePath;
+
+	std::string temp_OrbitTracePath;
 
 public:
 
@@ -88,6 +98,7 @@ public:
 		temp_JuliaIterationPath = concatFiles(gs+CommonHeaderPath, my_fractals_directory + user_source_path, gs+JuliaHeadPath, gs+IterationTailPath,"fractal_temp\\Temp_JI_" + std::to_string(myFractalObjectIndex) + ".frag");
 		temp_MandelbrotFinalstatePath = concatFiles(gs+CommonHeaderPath, my_fractals_directory + user_source_path, gs+MandelbrotHeadPath, gs+FinalstateTailPath,"fractal_temp\\Temp_MF_" + std::to_string(myFractalObjectIndex) + ".frag");
 		temp_JuliaFinalstatePath = concatFiles(gs+CommonHeaderPath, my_fractals_directory + user_source_path, gs+JuliaHeadPath, gs+FinalstateTailPath,"fractal_temp\\Temp_JF_" + std::to_string(myFractalObjectIndex) + ".frag");
+		temp_OrbitTracePath = concatFiles(gs+OrbitTraceHeadPath, my_fractals_directory + user_source_path, "", gs+OrbitTraceTailPath,"fractal_temp\\Temp_OT_" + std::to_string(myFractalObjectIndex) + ".geom");
 		//Set up the shader code
 		MandelbrotIterationProgram.addSourceFile("Rectangle.vert");
 		MandelbrotIterationProgram.addSourceFile(temp_MandelbrotIterationPath);
@@ -97,6 +108,9 @@ public:
 		MandelbrotFinalstateProgram.addSourceFile(temp_MandelbrotFinalstatePath);
 		JuliaFinalstateProgram.addSourceFile("Rectangle.vert");
 		JuliaFinalstateProgram.addSourceFile(temp_JuliaFinalstatePath);
+		OrbitTraceProgram.addSourceFile("OrbitTrace.vert");
+		OrbitTraceProgram.addSourceFile(temp_OrbitTracePath);
+		OrbitTraceProgram.addSourceFile("OrbitTrace.frag");
 	}
 
 	// DESTRUCTOR
@@ -132,6 +146,11 @@ public:
 		}
 	}
 
+	//Get a pointer to the orbit-tracing program
+	ShaderProgram* getOrbitTraceProgram() {
+		return &OrbitTraceProgram;
+	}
+
 	//Use this fractal
 	void Use(int fracType, int colorMethod) {
 		getProgram(fracType, colorMethod)->Use();
@@ -159,6 +178,11 @@ const std::string FractalObject::JuliaHeadPath = "Julia_head.glsl";
 const std::string FractalObject::IterationTailPath = "Iteration_tail.glsl";
 //Tail for Finalstate-colored programs
 const std::string FractalObject::FinalstateTailPath = "Finalstate_tail.glsl";
+
+//Head for Orbit-Tracing program
+const std::string FractalObject::OrbitTraceHeadPath = "OrbitTrace_head.glsl";
+//Tail for Orbit-Tracing program
+const std::string FractalObject::OrbitTraceTailPath = "OrbitTrace_tail.glsl";
 
 #endif 
 

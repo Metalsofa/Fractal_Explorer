@@ -100,6 +100,18 @@
     <None Include="..\Fractals\Simonbrot.glsl">
       <Filter>Shaders\Fractals</Filter>
     </None>
+    <None Include="..\GlobalSource\OrbitTrace_head.glsl">
+      <Filter>Shaders\GlobalSource</Filter>
+    </None>
+    <None Include="..\GlobalSource\OrbitTrace_tail.glsl">
+      <Filter>Shaders\GlobalSource</Filter>
+    </None>
+    <None Include="..\Shaders\OrbitTrace.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\OrbitTrace.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="brainstorm.txt">

@@ -4,9 +4,10 @@ Knowing GLSL is helpful for customizing it, but not for just playing with it!
 It helps to know a little bit about the relationship between the Mandelbrot and Julia sets.
 
 This application comes with three fractals built-in:
-	-Mandelbrot Fractal
-	-Burning Ship Fractal
-	-Simonbrot Fractal
+- Mandelbrot Fractal
+- Burning Ship Fractal
+- Simonbrot Fractal
+
 These are located in the "Fractals" folder.
 To make your own fractal, just make a new .glsl file in that directory,
 make sure it has the same form as the other files there,
